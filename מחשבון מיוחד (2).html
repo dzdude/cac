@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבון מנות</title>
+<style>
+    body {
+        font-family: 'Rubik', sans-serif;
+        direction: rtl;
+        padding: 20px;
+        font-weight: bold;
+        background-color: #f4f1eb; /* צבע רקע אפור בהיר */
+    }
+    .container {
+        margin-bottom: 20px;
+    }
+    label {
+        margin-right: 10px;
+    }
+    .input-group {
+        margin: 10px 0;
+    }
+    button {
+        margin-top: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .result {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .positive {
+        color: green;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    th, td {
+        padding: 8px;
+        text-align: center;
+        width: 25%; 
+    }
+    .hidden {
+        display: none;
+    }
+    .quantity-calculator {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #e7dfd8;
+    }
+    .quantity-item {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        gap: 10px;
+    }
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .quantity-button {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        cursor: pointer;
+        border: 1px solid #666;
+        background-color: white;
+        border-radius: 4px;
+    }
+    .quantity-display {
+        width: 40px;
+        text-align: center;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        padding: 4px;
+        border-radius: 4px;
+    }
+    .flex {
+        display: flex;
+    }
+    .flex-row {
+        flex-direction: row;
+    }
+    .gap-4 {
+        gap: 1rem;
+    }
+    .w-2\/3 {
+        width: 66.666667%;
+    }
+    .w-1\/3 {
+        width: 33.333333%;
+    }
+    .p-4 {
+        padding: 1rem;
+    }
+    .bg-gray-50 {
+        background-color: #f9fafb;
+    }
+    .rounded-lg {
+        border-radius: 0.5rem;
+    }
+    .whitespace-pre-wrap {
+        white-space: pre-wrap;
+    }
+    .order-message-container {
+        position: fixed;
+        left: 353px; 
+        top: 20px;
+        width: 250px;
+        padding: 15px;
+        background-color: #ebe7df;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .ingredients-container {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        width: 300px;
+        padding: 15px;
+        background-color: #ebe7df;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .bg-green-500 {
+        background-color: #22c55e;
+    }
+    .hover\:bg-green-600:hover {
+        background-color: #16a34a;
+    }
+    .text-white {
+        color: white;
+    }
+    .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .rounded {
+        border-radius: 0.25rem;
+    }
+    .flex {
+        display: flex;
+    }
+    .items-center {
+        align-items: center;
+    }
+    .justify-between {
+        justify-content: space-between;
+    }
+    .gap-2 {
+        gap: 0.5rem;
+    }
+    .mb-4 {
+        margin-bottom: 1rem;
+    }
+    .bg-blue-500 {
+        background-color: #3b82f6;
+    }
+    .hover\:bg-blue-600:hover {
+        background-color: #2563eb;
+    }
+    .order-message-container-meshek18 {
+        position: fixed;
+        left: 634px;
+        top: 20px;
+        width: 250px;
+        padding: 15px;
+        background-color: #ebe7df;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .quantity-calculator-meshek18 {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #e7dfd8;
+    }
+    .meshek18-title {
+        color: #2c5282;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .meshek18-button {
+        background-color: #4a5568;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .meshek18-button:hover {
+        background-color: #2d3748;
+    }
+    @media (max-width: 768px) {
+        .order-message-container-meshek18 {
+            position: static;
+            width: 100%;
+            margin: 20px 0;
+        }
+    }
+</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <h1>מחשבון מנות</h1>
+	
+	<!-- סלט יווני -->
+    <div class="container">
+        <h2>סלט יווני</h2>
+        <div class="input-group">
+            <label for="greek-salad">מספר מנות:</label>
+            <input type="number" id="greek-salad" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('greek-salad')">איפוס</button>
+    </div>
+
+    <!-- סלט ישראלי -->
+    <div class="container">
+        <h2>סלט ישראלי</h2>
+        <div class="input-group">
+            <label for="israeli-salad">מספר מנות:</label>
+            <input type="number" id="israeli-salad" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('israeli-salad')">איפוס</button>
+    </div>
+
+    <!-- פלטת ירקות -->
+    <div class="container">
+        <h2>פלטת ירקות</h2>
+        <div class="input-group">
+            <label for="vegetable-platter">מספר מנות:</label>
+            <input type="number" id="vegetable-platter" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('vegetable-platter')">איפוס</button>
+    </div>
+
+    <!-- סלט כרוב חמוציות -->
+    <div class="container">
+        <h2>סלט כרוב חמוציות</h2>
+        <div class="input-group">
+            <label for="cabbage-cranberry-salad">מספר מנות:</label>
+            <input type="number" id="cabbage-cranberry-salad" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('cabbage-cranberry-salad')">איפוס</button>
+    </div>
+
+    <!-- סלט שרי אגוזים -->
+    <div class="container">
+        <h2>סלט שרי אגוזים</h2>
+        <div class="input-group">
+            <label for="cherry-nut-salad">מספר מנות:</label>
+            <input type="number" id="cherry-nut-salad" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('cherry-nut-salad')">איפוס</button>
+    </div>
+
+    <!-- פלטת פירות -->
+    <div class="container">
+        <h2>פלטת פירות</h2>
+        <div class="input-group">
+            <label for="fruit-platter">מספר מנות:</label>
+            <input type="number" id="fruit-platter" value="0" min="0" onchange="calculateIngredients()">
+        </div>
+        <button onclick="resetCalculation('fruit-platter')">איפוס</button>
+    </div>
+	
+	<!-- סלט בורגול -->
+<div class="container">
+    <h2>סלט בורגול</h2>
+    <div class="input-group">
+        <label for="burgul-salad">מספר מנות:</label>
+        <input type="number" id="burgul-salad" value="0" min="0" onchange="calculateIngredients()">
+    </div>
+    <button onclick="resetCalculation('burgul-salad')">איפוס</button>
+</div>
+		
+	<!-- מחשבון כמויות עם הודעות -->
+<!-- מחשבון כמויות עם הודעות -->
+<div class="order-message-container">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">הודעת הזמנה ביסקוטי</h2>
+        <button 
+            onclick="sendToWhatsAppBiscootti()"
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
+        >
+            <span>📱</span>
+            שלח לווטסאפ
+        </button>
+    </div>
+	<div id="biscootti-message" class="whitespace-pre-wrap"></div>
+    <div class="quantity-calculator">
+        <h2>מחשבון כמויות מוצרים</h2>
+		 <button onclick="resetAllCalculations()">מחק חישובים</button>
+        <div class="quantity-item">
+            <span>מיני פשטידות</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('pie4', -1)">-</button>
+                <input type="text" id="pie4-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('pie4', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>1 ק"ג מיני פחזניות ריקות:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('empty-cream-puffs', -1)">-</button>
+                <input type="text" id="empty-cream-puffs-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('empty-cream-puffs', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>עוגות קראנץ בטעמים:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('crunch-cake', -1)">-</button>
+                <input type="text" id="crunch-cake-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('crunch-cake', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>קוראסון מיני חמאה ק"ג:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('mini-croissant', -1)">-</button>
+                <input type="text" id="mini-croissant-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('mini-croissant', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>ק"ג עוגיות שוקולד</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('mini-choc-chip', -1)">-</button>
+                <input type="text" id="mini-choc-chip-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('mini-choc-chip', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>ק"ג עוגיות מיני חמאה:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('mini-butter', -1)">-</button>
+                <input type="text" id="mini-butter-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('mini-butter', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>עוגיות מיני אלפחורס ק"ג</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('mini-alfajores', -1)">-</button>
+                <input type="text" id="mini-alfajores-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('mini-alfajores', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>פחזניות מצופות:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('coated-cream-puffs', -1)">-</button>
+                <input type="text" id="coated-cream-puffs-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('coated-cream-puffs', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>כדורי שוקולד על מקל:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('chocolate-pops', -1)">-</button>
+                <input type="text" id="chocolate-pops-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('chocolate-pops', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מקרונים:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('macarons', -1)">-</button>
+                <input type="text" id="macarons-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('macarons', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מארז עוגיות קריסטליות בראוניז:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('crystal-brownies', -1)">-</button>
+                <input type="text" id="crystal-brownies-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('crystal-brownies', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מארז עוגיות קריסטליות שוקולד ציפס:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('crystal-choc-chip', -1)">-</button>
+                <input type="text" id="crystal-choc-chip-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('crystal-choc-chip', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מארז עוגיות קריסטליות אלפחורס:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('crystal-alfajores', -1)">-</button>
+                <input type="text" id="crystal-alfajores-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('crystal-alfajores', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מארז עוגיות קריסטליות ג'ינגר:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('crystal-ginger', -1)">-</button>
+                <input type="text" id="crystal-ginger-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('crystal-ginger', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מיני פינק ליידי טבעוני:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('vegan-pink-lady', -1)">-</button>
+                <input type="text" id="vegan-pink-lady-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('vegan-pink-lady', 1)">+</button>
+            </div>
+        </div>
+        <div class="quantity-item">
+            <span>מיני פס פיסטוק טבעוני:</span>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="updateQuantity('vegan-pistachio', -1)">-</button>
+                <input type="text" id="vegan-pistachio-quantity" class="quantity-display" value="0" readonly>
+                <button class="quantity-button" onclick="updateQuantity('vegan-pistachio', 1)">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- הוסף את זה אחרי הקוד הקיים של ביסקוטי -->
+<div class="order-message-container-meshek18">
+<div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-bold">הודעת הזמנה משק 18</h2>
+    <button 
+        onclick="sendToWhatsAppMeshek18()"
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
+    >
+        <span>📱</span>
+        שלח לווטסאפ
+    </button>
+</div>
+<div id="meshek18-message" class="whitespace-pre-wrap mb-4"></div>
+<div class="quantity-calculator">
+    <h2>מחשבון כמויות מוצרים משק 18</h2>
+    <button onclick="resetAllCalculationsMeshek18()">מחק חישובים</button>
+    
+        <div class="quantity-item">
+        <span>קרטון חלב</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('milk', -1)">-</button>
+            <input type="text" id="milk-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('milk', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">  
+        <span>קרטון חלב סויה</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('soy-milk', -1)">-</button>
+            <input type="text" id="soy-milk-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('soy-milk', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>קרטון חלב שקדים</span>
+        <div class="quantity-controls"> 
+            <button class="quantity-button" onclick="updateQuantityMeshek18('almond-milk', -1)">-</button>
+            <input type="text" id="almond-milk-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('almond-milk', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>ממרח אבוקדו</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('avocado-spread', -1)">-</button>
+            <input type="text" id="avocado-spread-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('avocado-spread', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item"> 
+        <span>גבינת מוצרלה</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('mozzarella', -1)">-</button>  
+            <input type="text" id="mozzarella-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('mozzarella', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>גבינת פטינה</span> 
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('fetina', -1)">-</button>
+            <input type="text" id="fetina-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('fetina', 1)">+</button>   
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>גבינת גאודה פרוסה</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('gouda', -1)">-</button>
+            <input type="text" id="gouda-quantity" class="quantity-display" value="0" readonly>    
+            <button class="quantity-button" onclick="updateQuantityMeshek18('gouda', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>גלון רוטב פיצה</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('pizza-sauce', -1)">-</button>
+            <input type="text" id="pizza-sauce-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('pizza-sauce', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>גלון אלף האיים</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('thousand-island', -1)">-</button>
+            <input type="text" id="thousand-island-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('thousand-island', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>רוטב וינגרנט</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('vinaigrette', -1)">-</button>
+            <input type="text" id="vinaigrette-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('vinaigrette', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>ממרח עגבניות מיובשות</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('dried-tomato-spread', -1)">-</button>
+            <input type="text" id="dried-tomato-spread-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('dried-tomato-spread', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>ממרח פסטו</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('pesto', -1)">-</button>
+            <input type="text" id="pesto-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('pesto', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="quantity-item">
+        <span>מחית אבוקדו</span>
+        <div class="quantity-controls">
+            <button class="quantity-button" onclick="updateQuantityMeshek18('avocado-mash', -1)">-</button>
+            <input type="text" id="avocado-mash-quantity" class="quantity-display" value="0" readonly>
+            <button class="quantity-button" onclick="updateQuantityMeshek18('avocado-mash', 1)">+</button>
+        </div>
+    </div>
+<div id="meshek18-message" class="whitespace-pre-wrap"></div>
+</div>
+	
+	<!-- סה"כ חישוב -->
+    <div class="ingredients-container">
+	<div class="flex justify-between items-center">
+    <h2>סה"כ מצרכים</h2>
+    <button 
+        onclick="downloadPDF()"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
+    >
+        <span>📥</span>
+        הורד PDF
+    </button>
+</div>
+<table id="total-table">
+<tfoot>
+    <tr>
+      <td colspan="3"><strong>סה"כ מחיר:</strong></td>
+      <td id="total-price">0</td>
+    </tr>
+  </tfoot>
+   <thead>
+    <tr>
+      <th>מוצר</th>
+      <th>כמות</th>
+      <th>מחיר יחידה</th>
+      <th>מחיר סה"כ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="row-cucumbers">
+      <td>מלפפון</td>
+      <td id="total-cucumbers">0</td>
+      <td>2.50</td>
+      <td id="total-price-cucumbers">0</td>
+    </tr>
+    <tr id="row-tomatoes">
+      <td>עגבניה</td>
+      <td id="total-tomatoes">0</td>
+      <td>3.00</td>
+      <td id="total-price-tomatoes">0</td>
+    </tr>
+    <tr id="row-onions">
+      <td>בצל</td>
+      <td id="total-onions">0</td>
+      <td>2.00</td>
+      <td id="total-price-onions">0</td>
+    </tr>
+    <tr id="row-lettuce">
+      <td>חסה</td>
+      <td id="total-lettuce">0</td>
+      <td>4.50</td>
+      <td id="total-price-lettuce">0</td>
+    </tr>
+    <tr id="row-carrots">
+      <td>גזר</td>
+      <td id="total-carrots">0</td>
+      <td>3.50</td>
+      <td id="total-price-carrots">0</td>
+    </tr>
+    <tr id="row-kohlrabi">
+      <td>קולורבי</td>
+      <td id="total-kohlrabi">0</td>
+      <td>3.00</td>
+      <td id="total-price-kohlrabi">0</td>
+    </tr>
+    <tr id="row-pepper">
+      <td>גמבה אדומה</td>
+      <td id="total-pepper">0</td>
+      <td>5.00</td>
+      <td id="total-price-pepper">0</td>
+    </tr>
+    <tr id="row-olives">
+      <td>זיתים שחורים</td>
+      <td id="total-olives">0</td>
+      <td>15.00</td>
+      <td id="total-price-olives">0</td>
+    </tr>
+    <tr id="row-feta">
+      <td>גוש בולגרית</td>
+      <td id="total-feta">0</td>
+      <td>24.90</td>
+      <td id="total-price-feta">0</td>
+    </tr>
+    <tr id="row-cabbage">
+      <td>כרוב קצוץ</td>
+      <td id="total-cabbage">0</td>
+      <td>6.00</td>
+      <td id="total-price-cabbage">0</td>
+    </tr>
+    <tr id="row-cranberries">
+      <td>חופן חמוציות</td>
+      <td id="total-cranberries">0</td>
+      <td>10.00</td>
+      <td id="total-price-cranberries">0</td>
+    </tr>
+    <tr id="row-nuts">
+      <td>חופן אגוזי מלך</td>
+      <td id="total-nuts">0</td>
+      <td>25.00</td>
+      <td id="total-price-nuts">0</td>
+    </tr>
+    <tr id="row-baby-leaf">
+      <td>עליי בייבי</td>
+      <td id="total-baby-leaf">0</td>
+      <td>12.00</td>
+      <td id="total-price-baby-leaf">0</td>
+    </tr>
+    <tr id="row-arabic-lettuce">
+      <td>חסה ערבית</td>
+      <td id="total-arabic-lettuce">0</td>
+      <td>4.50</td>
+      <td id="total-price-arabic-lettuce">0</td>
+    </tr>
+    <tr id="row-kiwi">
+      <td>קיווי</td>
+<td id="total-kiwi">0</td>
+<td>6.00</td>
+<td id="total-price-kiwi">0</td>
+</tr>
+<tr id="row-apple">
+<td>תפוח</td>
+<td id="total-apple">0</td>
+<td>4.50</td>
+<td id="total-price-apple">0</td>
+</tr>
+<tr id="row-pineapple">
+<td>אננס</td>
+<td id="total-pineapple">0</td>
+<td>12.00</td>
+<td id="total-price-pineapple">0</td>
+</tr>
+<tr id="row-persimmon">
+<td>אפרסמון</td>
+<td id="total-persimmon">0</td>
+<td>6.00</td>
+<td id="total-price-persimmon">0</td>
+</tr>
+<tr id="row-grapefruit">
+<td>אשכולית אדומה</td>
+<td id="total-grapefruit">0</td>
+<td>5.00</td>
+<td id="total-price-grapefruit">0</td>
+</tr>
+<tr id="row-orange">
+<td>תפוז</td>
+<td id="total-orange">0</td>
+<td>4.00</td>
+<td id="total-price-orange">0</td>
+</tr>
+<tr id="row-blueberries">
+<td>אוכמניות</td>
+<td id="total-blueberries">0</td>
+<td>30.00</td>
+<td id="total-price-blueberries">0</td>
+</tr>
+<tr id="row-cherry-tomatoes">
+      <td>עגבניות שרי</td>
+      <td id="total-cherry-tomatoes">0</td>
+      <td>8.00</td>
+      <td id="total-price-cherry-tomatoes">0</td>
+    </tr>
+	<tr id="row-burgul">
+    <td>בורגול דק</td>
+    <td id="total-burgul">0</td>
+    <td>12.00</td>
+    <td id="total-price-burgul">0</td>
+</tr>
+<tr id="row-green-onion">
+    <td>בצל ירוק</td>
+    <td id="total-green-onion">0</td>
+    <td>3.00</td>
+    <td id="total-price-green-onion">0</td>
+</tr>
+<tr id="row-celery">
+    <td>סלרי</td>
+    <td id="total-celery">0</td>
+    <td>6.00</td>
+    <td id="total-price-celery">0</td>
+</tr>
+<tr id="row-parsley">
+    <td>פטרוזליה</td>
+    <td id="total-parsley">0</td>
+    <td>3.00</td>
+    <td id="total-price-parsley">0</td>
+</tr>
+<tr id="row-cilantro">
+    <td>כוסברה</td>
+    <td id="total-cilantro">0</td>
+    <td>3.00</td>
+    <td id="total-price-cilantro">0</td>
+</tr>
+<tr id="row-mint">
+    <td>נענע</td>
+    <td id="total-mint">0</td>
+    <td>3.00</td>
+    <td id="total-price-mint">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script>
+	
+// פונקציה לחישוב החומרים
+function calculateIngredients() {
+   // מקבל את מספר המנות לכל מנה
+   let greekAmount = parseInt(document.getElementById('greek-salad').value) || 0;
+   let israeliAmount = parseInt(document.getElementById('israeli-salad').value) || 0;
+   let vegetableAmount = parseInt(document.getElementById('vegetable-platter').value) || 0;
+   let cabbageCranberryAmount = parseInt(document.getElementById('cabbage-cranberry-salad').value) || 0;
+   let cherryNutAmount = parseInt(document.getElementById('cherry-nut-salad').value) || 0;
+   let fruitPlatterAmount = parseInt(document.getElementById('fruit-platter').value) || 0;
+   let burgulAmount = parseInt(document.getElementById('burgul-salad').value) || 0;
+   
+   // חישוב המרכיבים עבור סלט יווני
+   let greekCucumbers = (5 * greekAmount).toFixed(2);
+   let greekTomatoes = (5 * greekAmount).toFixed(2);
+   let greekOnion = (0.5 * greekAmount).toFixed(2);
+   let greekLettuce = (greekAmount).toFixed(2);
+   let greekOlives = (0.2 * greekAmount).toFixed(2);
+   let greekFeta = (greekAmount).toFixed(2);
+
+   // חישוב המרכיבים עבור סלט ישראלי
+   let israeliCucumbers = (5 * israeliAmount).toFixed(2);
+   let israeliTomatoes = (5 * israeliAmount).toFixed(2);
+   let israeliOnion = (0.5 * israeliAmount).toFixed(2);
+   let israeliLettuce = (israeliAmount).toFixed(2);
+
+   // חישוב המרכיבים עבור פלטת ירקות
+   let vegetableCucumbers = (4 * vegetableAmount).toFixed(2);
+   let vegetableCarrot = (4 * vegetableAmount).toFixed(2);
+   let vegetableKohlrabi = (1 * vegetableAmount).toFixed(2);
+   let vegetablePepper = (2 * vegetableAmount).toFixed(2);
+
+   // חישוב המרכיבים עבור סלט כרוב חמוציות
+   let cabbageCabbage = (2.5 * cabbageCranberryAmount).toFixed(2);
+   let cabbageCarrot = (0.25 * cabbageCranberryAmount).toFixed(2);
+   let cabbageCranberries = (3 * cabbageCranberryAmount).toFixed(2);
+   let cabbageNuts = (3 * cabbageCranberryAmount).toFixed(2);
+
+   // חישוב המרכיבים עבור סלט שרי אגוזים
+ let cherryNutBabyLeaf = (0.5 * cherryNutAmount).toFixed(2);
+   let cherryNutArabicLettuce = (0.5 * cherryNutAmount).toFixed(2);
+   let cherryNutCranberries = (3 * cherryNutAmount).toFixed(2);
+   let cherryNutNuts = (3 * cherryNutAmount).toFixed(2);
+   let cherryTomatoes = (0.5 * cherryNutAmount).toFixed(2);
+
+
+   // חישוב המרכיבים עבור פלטת פירות
+   let kiwi = (2 * fruitPlatterAmount).toFixed(2);
+   let apple = (2 * fruitPlatterAmount).toFixed(2);
+   let pineapple = (0.25 * fruitPlatterAmount).toFixed(2);
+   let persimmon = (2 * fruitPlatterAmount).toFixed(2);
+   let grapefruit = (1 * fruitPlatterAmount).toFixed(2);
+   let orange = (1 * fruitPlatterAmount).toFixed(2);
+   let blueberries = (0.3 * fruitPlatterAmount).toFixed(2);
+
+   // חישוב המרכיבים עבור סלט בורגול
+   let burgulBurgul = (0.5 * burgulAmount).toFixed(2);
+   let burgulCucumbers = (5 * burgulAmount).toFixed(2);
+   let burgulTomatoes = (5 * burgulAmount).toFixed(2);
+   let burgulGreenOnion = (1 * burgulAmount).toFixed(2);
+   let burgulCelery = (1 * burgulAmount).toFixed(2);
+   let burgulParsley = (2 * burgulAmount).toFixed(2);
+   let burgulCilantro = (2 * burgulAmount).toFixed(2);
+   let burgulMint = (1 * burgulAmount).toFixed(2);
+
+
+   // חישוב סה"כ
+   let totalCucumbers = (parseFloat(greekCucumbers) + parseFloat(israeliCucumbers) + parseFloat(vegetableCucumbers) + parseFloat(burgulCucumbers)).toFixed(2);
+   let totalTomatoes = (parseFloat(greekTomatoes) + parseFloat(israeliTomatoes) + parseFloat(burgulTomatoes)).toFixed(2);
+   let totalOnions = (parseFloat(greekOnion) + parseFloat(israeliOnion)).toFixed(2);
+   let totalCarrots = (parseFloat(vegetableCarrot) + parseFloat(cabbageCarrot)).toFixed(2);
+   let totalKohlrabi = (parseFloat(vegetableKohlrabi)).toFixed(2);
+   let totalPepper = (parseFloat(vegetablePepper)).toFixed(2);
+   let totalLettuce = (parseFloat(greekLettuce) + parseFloat(israeliLettuce)).toFixed(2);
+   let totalOlives = (parseFloat(greekOlives)).toFixed(2);
+   let totalFeta = (parseFloat(greekFeta)).toFixed(2);
+   let totalCabbage = (parseFloat(cabbageCabbage)).toFixed(2);
+   let totalCranberries = (parseFloat(cabbageCranberries) + parseFloat(cherryNutCranberries)).toFixed(2);
+   let totalNuts = (parseFloat(cabbageNuts) + parseFloat(cherryNutNuts)).toFixed(2);
+   let totalBabyLeaf = (parseFloat(cherryNutBabyLeaf)).toFixed(2);
+   let totalArabicLettuce = (parseFloat(cherryNutArabicLettuce)).toFixed(2);
+
+   // עדכון הטבלה
+   document.getElementById('total-cucumbers').innerText = totalCucumbers;
+   document.getElementById('total-tomatoes').innerText = totalTomatoes;
+   document.getElementById('total-onions').innerText = totalOnions;
+   document.getElementById('total-lettuce').innerText = totalLettuce;
+   document.getElementById('total-carrots').innerText = totalCarrots;
+   document.getElementById('total-kohlrabi').innerText = totalKohlrabi;
+   document.getElementById('total-pepper').innerText = totalPepper;
+   document.getElementById('total-olives').innerText = totalOlives;
+   document.getElementById('total-feta').innerText = totalFeta;
+   document.getElementById('total-cabbage').innerText = totalCabbage;
+   document.getElementById('total-cranberries').innerText = totalCranberries;
+   document.getElementById('total-nuts').innerText = totalNuts;
+   document.getElementById('total-baby-leaf').innerText = totalBabyLeaf;
+   document.getElementById('total-arabic-lettuce').innerText = totalArabicLettuce;
+   document.getElementById('total-kiwi').innerText = kiwi;
+   document.getElementById('total-apple').innerText = apple;
+   document.getElementById('total-pineapple').innerText = pineapple;
+   document.getElementById('total-persimmon').innerText = persimmon;
+   document.getElementById('total-grapefruit').innerText = grapefruit;
+   document.getElementById('total-orange').innerText = orange;
+   document.getElementById('total-blueberries').innerText = blueberries;
+   document.getElementById('total-cherry-tomatoes').innerText = cherryTomatoes;
+   document.getElementById('total-price-cherry-tomatoes').innerText = (cherryTomatoes * 8).toFixed(2);
+   document.getElementById('total-burgul').innerText = burgulBurgul;
+   document.getElementById('total-green-onion').innerText = burgulGreenOnion;
+   document.getElementById('total-celery').innerText = burgulCelery;
+   document.getElementById('total-parsley').innerText = burgulParsley;
+   document.getElementById('total-cilantro').innerText = burgulCilantro;
+   document.getElementById('total-mint').innerText = burgulMint;
+
+
+   // עדכון מחירים
+      document.getElementById('total-price-burgul').innerText = (burgulBurgul * 12).toFixed(2);
+   document.getElementById('total-price-green-onion').innerText = (burgulGreenOnion * 3).toFixed(2);
+   document.getElementById('total-price-celery').innerText = (burgulCelery * 6).toFixed(2);
+   document.getElementById('total-price-parsley').innerText = (burgulParsley * 3).toFixed(2);
+   document.getElementById('total-price-cilantro').innerText = (burgulCilantro * 3).toFixed(2);
+   document.getElementById('total-price-mint').innerText = (burgulMint * 3).toFixed(2);
+   document.getElementById('total-price-cucumbers').innerText = (totalCucumbers * 2.5).toFixed(2);
+   document.getElementById('total-price-tomatoes').innerText = (totalTomatoes * 3).toFixed(2);
+   document.getElementById('total-price-onions').innerText = (totalOnions * 2).toFixed(2);
+   document.getElementById('total-price-lettuce').innerText = (totalLettuce * 4.5).toFixed(2);
+   document.getElementById('total-price-carrots').innerText = (totalCarrots * 3.5).toFixed(2);
+   document.getElementById('total-price-kohlrabi').innerText = (totalKohlrabi * 3).toFixed(2);  
+   document.getElementById('total-price-pepper').innerText = (totalPepper * 5).toFixed(2);
+   document.getElementById('total-price-olives').innerText = (totalOlives * 15).toFixed(2);
+   document.getElementById('total-price-feta').innerText = (totalFeta * 24.9).toFixed(2);
+   document.getElementById('total-price-cabbage').innerText = (totalCabbage * 6).toFixed(2);
+   document.getElementById('total-price-cranberries').innerText = (totalCranberries * 10).toFixed(2);
+   document.getElementById('total-price-nuts').innerText = (totalNuts * 25).toFixed(2);
+   document.getElementById('total-price-baby-leaf').innerText = (totalBabyLeaf * 12).toFixed(2);
+   document.getElementById('total-price-arabic-lettuce').innerText = (totalArabicLettuce * 4.5).toFixed(2);
+   document.getElementById('total-price-kiwi').innerText = (kiwi * 6).toFixed(2);
+   document.getElementById('total-price-apple').innerText = (apple * 4.5).toFixed(2);
+   document.getElementById('total-price-pineapple').innerText = (pineapple * 12).toFixed(2);
+   document.getElementById('total-price-persimmon').innerText = (persimmon * 6).toFixed(2);
+   document.getElementById('total-price-grapefruit').innerText = (grapefruit * 5).toFixed(2);
+   document.getElementById('total-price-orange').innerText = (orange * 4).toFixed(2);
+   document.getElementById('total-price-blueberries').innerText = (blueberries * 30).toFixed(2);
+
+   // חישוב סה"כ מחיר
+   let totalPrice = 0;
+   const rows = document.querySelectorAll('#total-table tbody tr');
+   rows.forEach(row => {
+     const price = parseFloat(row.cells[3].innerText);
+     if (!isNaN(price)) {
+       totalPrice += price;
+     }
+   });
+
+   document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+
+   // הסתרת שורות שהערך שלהן הוא 0
+   hideZeroRows();
+
+   // הדגשה בצבע ירוק למוצרים עם כמות חיובית
+   highlightPositiveValues();
+}
+
+function resetCalculation(inputId) {
+   document.getElementById(inputId).value = 0;
+   calculateIngredients();
+}
+
+function hideZeroRows() {
+   const rows = document.querySelectorAll('#total-table tbody tr');
+   rows.forEach(row => {
+       const value = parseFloat(row.cells[1].innerText);
+       if (value === 0) {
+           row.classList.add('hidden');
+       } else {
+           row.classList.remove('hidden');
+       }
+   });
+}
+
+function highlightPositiveValues() {
+   const rows = document.querySelectorAll('#total-table tbody tr');
+   rows.forEach(row => {
+       const value = parseFloat(row.cells[1].innerText);
+       if (value > 0) {
+           row.cells[1].classList.add('positive');
+       } else {
+           row.cells[1].classList.remove('positive');
+       }
+   });
+}
+
+function updateQuantity(itemId, change) {
+   const input = document.getElementById(`${itemId}-quantity`);
+   let currentValue = parseInt(input.value);
+   
+   // חישוב הערך החדש
+   let newValue = currentValue + change;
+   
+   // וידוא שהערך נשאר בין 0 ל-10
+   if (newValue >= 0 && newValue <= 10) {
+       input.value = newValue;
+       updateOrderMessageBiscootti();
+   }
+}
+
+function updateOrderMessageBiscootti() {
+   let message = "היי, מה שלומך? אשמח להזמין מביסקוטי:\n\n";
+   let hasItems = false;
+   
+   const items = [
+       { id: 'pie4', text: 'מיני פשטידות בטעמים שונים' },
+       { id: 'empty-cream-puffs', text: 'ק"ג מיני פחזניות ריקות' },
+       { id: 'crunch-cake', text: 'עוגות קראנץ בטעמים' },
+       { id: 'mini-croissant', text: 'ק"ג קוראסון מיני חמאה' },
+       { id: 'mini-choc-chip', text: 'ק"ג עוגיות מיני שוקולד ציפס' },
+       { id: 'mini-butter', text: 'ק"ג עוגיות מיני חמאה' },
+       { id: 'mini-alfajores', text: 'ק"ג עוגיות מיני אלפחורס' },
+       { id: 'coated-cream-puffs', text: 'פחזניות מצופות' },
+       { id: 'chocolate-pops', text: 'כדורי שוקולד על מקל' },
+       { id: 'macarons', text: 'מקרונים בטעמים שונים' },
+       { id: 'crystal-brownies', text: 'מארז עוגיות קריסטליות בראוניז' },
+{ id: 'crystal-choc-chip', text: 'מארז עוגיות קריסטליות שוקולד ציפס' },
+{ id: 'crystal-alfajores', text: 'מארז עוגיות קריסטליות אלפחורס' },
+{ id: 'crystal-ginger', text: 'מארז עוגיות קריסטליות ג\'ינגר' },
+{ id: 'vegan-pink-lady', text: 'מיני פינק ליידי טבעוני' },
+{ id: 'vegan-pistachio', text: 'מיני פס פיסטוק טבעוני' }
+];
+
+items.forEach(item => {
+const quantity = parseInt(document.getElementById(`${item.id}-quantity`).value);
+if (quantity > 0) {
+    message += `${quantity} ${item.text}\n`;
+    hasItems = true;
+}
+});
+
+if (!hasItems) {
+message = "טרם נבחרו פריטים להזמנה";
+}
+
+document.getElementById('biscootti-message').textContent = message;
+}
+
+function resetAllCalculations() {
+const items = [
+'pie4', 'empty-cream-puffs', 'crunch-cake', 'mini-croissant',
+'mini-choc-chip', 'mini-butter', 'mini-alfajores', 'coated-cream-puffs',
+'chocolate-pops', 'macarons', 'crystal-brownies', 'crystal-choc-chip',
+'crystal-alfajores', 'crystal-ginger', 'vegan-pink-lady', 'vegan-pistachio'
+];
+
+items.forEach(itemId => {
+const input = document.getElementById(`${itemId}-quantity`);
+if (input) {
+    input.value = "0";
+}
+});
+
+updateOrderMessageBiscootti();
+}
+
+function sendToWhatsAppBiscootti() {
+const messageElement = document.getElementById('biscootti-message');
+if (!messageElement) return;
+
+const message = messageElement.textContent;
+if (!message || message === "טרם נבחרו פריטים להזמנה") {
+alert("אנא בחר פריטים להזמנה תחילה");
+return;
+}
+
+// מספר הטלפון של ביסקוטי
+const phoneNumber = "972533309789";
+
+const encodedMessage = encodeURIComponent(message);
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+window.open(whatsappUrl, '_blank');
+}
+
+function updateQuantityMeshek18(itemId, change) {
+const input = document.getElementById(`${itemId}-quantity`);
+let currentValue = parseInt(input.value);
+
+// חישוב הערך החדש
+let newValue = currentValue + change;
+
+// וידוא שהערך נשאר בין 0 ל-10
+if (newValue >= 0 && newValue <= 10) {
+input.value = newValue;
+updateOrderMessageMeshek18();
+}
+}
+
+function updateOrderMessageMeshek18() {
+let message = "היי, מה שלומך? אשמח להזמין למשק 18:\n\n";
+let hasItems = false;
+
+const items = [
+{ id: 'milk', text: 'קרטון חלב' },
+{ id: 'soy-milk', text: 'קרטון חלב סויה ביו' },
+{ id: 'almond-milk', text: 'קרטון חלב שקדים ביו' },
+{ id: 'avocado-spread', text: 'ממרח אבוקדו' },
+{ id: 'mozzarella', text: 'גבינת PIZZI' },
+{ id: 'fetina', text: 'גבינת פטינה' },  
+{ id: 'gouda', text: 'גבינת גאודה פרוסה' },
+{ id: 'pizza-sauce', text: 'גלון רוטב פיצה' },
+{ id: 'thousand-island', text: 'גלון אלף האיים' },
+{ id: 'vinaigrette', text: 'רוטב וינגרט ליטר' },
+{ id: 'dried-tomato-spread', text: 'ממרח עגבניות מיובשות' },
+{ id: 'pesto', text: 'ממרח פסטו' },  
+{ id: 'avocado-mash', text: 'מחית אבוקדו' }
+];
+
+items.forEach(item => {
+const quantity = parseInt(document.getElementById(`${item.id}-quantity`).value);
+if (quantity > 0) {
+    message += `${quantity} ${item.text}\n`;
+    hasItems = true;
+}
+});
+
+if (!hasItems) {
+message = "טרם נבחרו פריטים להזמנה";
+}
+
+document.getElementById('meshek18-message').textContent = message;
+}
+
+function resetAllCalculationsMeshek18() {
+const items = [
+'milk', 'soy-milk', 'almond-milk', 'avocado-spread',
+'mozzarella', 'fetina', 'gouda', 'pizza-sauce',
+'thousand-island', 'vinaigrette', 'dried-tomato-spread', 'pesto', 
+'avocado-mash'
+];
+
+items.forEach(itemId => {
+const input = document.getElementById(`${itemId}-quantity`);
+if (input) {
+    input.value = "0";
+}
+});
+
+updateOrderMessageMeshek18();
+}
+
+function sendToWhatsAppMeshek18() {
+const messageElement = document.getElementById('meshek18-message');
+if (!messageElement) return;
+
+const message = messageElement.textContent;
+if (!message || message === "טרם נבחרו פריטים להזמנה") {
+alert("אנא בחר פריטים להזמנה תחילה");
+return;
+}
+
+// מספר הטלפון של משק 18 - יש להחליף למספר האמיתי
+const phoneNumber = "972533309789";
+
+const encodedMessage = encodeURIComponent(message);
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+window.open(whatsappUrl, '_blank');
+}
+
+function downloadPDF() {
+// יצירת אלמנט זמני עבור הטבלה
+const element = document.createElement('div');
+const table = document.getElementById('total-table').cloneNode(true);
+element.appendChild(table);
+
+// הסרת שורות מוסתרות
+const hiddenRows = element.querySelectorAll('.hidden');
+hiddenRows.forEach(row => row.remove());
+
+// הגדרות עבור ה-PDF
+const opt = {
+margin: 1,
+filename: 'טבלת-מצרכים.pdf',
+image: { type: 'jpeg', quality: 0.98 },
+html2canvas: { scale: 2 },
+jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+};
+
+// יצירת ה-PDF
+html2pdf().set(opt).from(element).save();
+}
+</script>
+</body>
+</html>
